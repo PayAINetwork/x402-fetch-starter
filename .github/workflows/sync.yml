@@ -49,8 +49,9 @@ jobs:
 
       - name: Open PR with changes
         uses: peter-evans/create-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore(fetch): sync from ${UPSTREAM_REPO}@${{ env.UPSTREAM_SHA }}"
           branch: chore/sync-upstream
           title: "Sync upstream (clients/fetch) — ${{ env.UPSTREAM_SHA }}"

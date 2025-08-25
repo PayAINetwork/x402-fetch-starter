@@ -2,6 +2,7 @@ name: Sync upstream x402 clients/fetch
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 on:
   schedule: [ { cron: "0 * * * *" } ]  # hourly
   workflow_dispatch:

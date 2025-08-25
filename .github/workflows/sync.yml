@@ -32,8 +32,8 @@ jobs:
 
       - name: Inject version into template and record in root
         run: |
-          # 1) write into template/package.json as a caret range
-          node -e "const fs=require('fs');const p='template/package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));(j.dependencies??={});if(process.env.X402_FETCH_VERSION!=='0.0.0'){j.dependencies['x402-fetch']='^'+process.env.X402_FETCH_VERSION;}fs.writeFileSync(p,JSON.stringify(j,null,2));"
+          # 1) update template/src/package.json: replace workspace ref with published version
+          node -e "const fs=require('fs');const p='template/src/package.json';if(fs.existsSync(p)){const j=JSON.parse(fs.readFileSync(p,'utf8'));const v=process.env.X402_FETCH_VERSION;const setVer=(obj)=>{if(!obj)return false; if(Object.prototype.hasOwnProperty.call(obj,'x402-fetch')){if(v!=='0.0.0'){obj['x402-fetch']='^'+v;} else {delete obj['x402-fetch'];} return true;} return false;};const changed=setVer(j.dependencies)||setVer(j.devDependencies);if(!changed && v!=='0.0.0'){(j.dependencies??={})['x402-fetch']='^'+v;}fs.writeFileSync(p,JSON.stringify(j,null,2));}"
 
           # 2) store for traceability in root package.json
           node -e "const fs=require('fs');const p='package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));(j.config??={});j.config.x402FetchVersion=process.env.X402_FETCH_VERSION;fs.writeFileSync(p,JSON.stringify(j,null,2));"

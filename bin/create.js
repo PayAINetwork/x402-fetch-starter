@@ -21,11 +21,17 @@ if (fs.existsSync(targetDir) && fs.readdirSync(targetDir).length) {
 // copy template
 fs.cpSync(templateDir, targetDir, { recursive: true });
 
-// rename package name inside the template’s package.json
-const pkgPath = path.join(targetDir, "package.json");
-const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
-pkg.name = projectName.replace(/[^a-zA-Z0-9-_./@]/g, "-");
-fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+// prefer the app under src/, and ensure its package name matches the project
+const appPkgPath = path.join(targetDir, "src", "package.json");
+if (fs.existsSync(appPkgPath)) {
+  const appPkg = JSON.parse(fs.readFileSync(appPkgPath, "utf8"));
+  appPkg.name = projectName.replace(/[^a-zA-Z0-9-_./@]/g, "-");
+  fs.writeFileSync(appPkgPath, JSON.stringify(appPkg, null, 2));
+}
+
+// if a root package.json exists in the template, remove it to avoid duplicates
+const rootPkgPath = path.join(targetDir, "package.json");
+try { fs.unlinkSync(rootPkgPath); } catch {}
 
 // init git
 try {
@@ -37,8 +43,8 @@ console.log(`
 Scaffolded ${projectName}!
 
 Next steps:
-  cd ${projectName}
-  cp .env.example .env  # then edit secrets and the PAID_URL
+  cd ${projectName}/src
+  cp .env-local .env  # then edit the values inside .env
   npm i
   npm run dev
 

@@ -1,28 +1,34 @@
-import 'dotenv/config';
+import { config } from "dotenv";
+import { Hex } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { decodeXPaymentResponse, wrapFetchWithPayment } from "x402-fetch";
 
-// The upstream sync will map the official example into this folder.
-// This fallback shows a minimal shape using wrapFetchWithPayment.
-// It will be replaced on sync if upstream provides example code.
-async function main(): Promise<void> {
-  const paidUrl = process.env.PAID_URL;
-  const apiKey = process.env.X402_API_KEY;
+config();
 
-  if (!paidUrl || !apiKey) {
-    console.error('Please set PAID_URL and X402_API_KEY in your .env');
-    process.exit(1);
-  }
+const privateKey = process.env.PRIVATE_KEY as Hex;
+const baseURL = process.env.RESOURCE_SERVER_URL as string; // e.g. https://example.com
+const endpointPath = process.env.ENDPOINT_PATH as string; // e.g. /weather
+const url = `${baseURL}${endpointPath}`; // e.g. https://example.com/weather
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { wrapFetchWithPayment } = await import('x402-fetch');
-  const paidFetch = wrapFetchWithPayment(fetch, { paidUrl, apiKey });
-
-  const response = await paidFetch(paidUrl);
-  console.log('Response status:', response.status);
+if (!baseURL || !privateKey || !endpointPath) {
+  console.error("Missing required environment variables");
+  process.exit(1);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+const account = privateKeyToAccount(privateKey);
 
+const fetchWithPayment = wrapFetchWithPayment(fetch, account);
 
+fetchWithPayment(url, {
+  method: "GET",
+})
+  .then(async response => {
+    const body = await response.json();
+    console.log(body);
+
+    const paymentResponse = decodeXPaymentResponse(response.headers.get("x-payment-response")!);
+    console.log(paymentResponse);
+  })
+  .catch(error => {
+    console.error(error.response?.data?.error);
+  });

@@ -11,12 +11,14 @@
     "typecheck": "tsc -p . --noEmit"
   },
   "dependencies": {
+    "x402-fetch": "^0.5.1"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",
     "tsx": "^4.16.2",
     "typescript": "^5.5.4"
   },
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  }
 }
-

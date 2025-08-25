@@ -36,13 +36,18 @@ try {
 
 // print next steps
 console.log(`
-Scaffolded ${projectName}!
+Successfully created ${projectName}!
+
+You now have a starter example for Fetch wrapped with x402 payment handling.
 
 Next steps:
   cd ${projectName}
   cp .env-local .env  # then edit the values inside .env
   npm i
   npm run dev
+
+After install, open the main file (e.g., index.ts) to see how the example works.
+Docs: https://docs.payai.network
 
 Happy building 🏗️
 `);

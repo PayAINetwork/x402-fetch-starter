@@ -21,17 +21,13 @@ if (fs.existsSync(targetDir) && fs.readdirSync(targetDir).length) {
 // copy template
 fs.cpSync(templateDir, targetDir, { recursive: true });
 
-// prefer the app under src/, and ensure its package name matches the project
-const appPkgPath = path.join(targetDir, "src", "package.json");
-if (fs.existsSync(appPkgPath)) {
-  const appPkg = JSON.parse(fs.readFileSync(appPkgPath, "utf8"));
-  appPkg.name = projectName.replace(/[^a-zA-Z0-9-_./@]/g, "-");
-  fs.writeFileSync(appPkgPath, JSON.stringify(appPkg, null, 2));
-}
-
-// if a root package.json exists in the template, remove it to avoid duplicates
+// ensure the root package.json name matches the project
 const rootPkgPath = path.join(targetDir, "package.json");
-try { fs.unlinkSync(rootPkgPath); } catch {}
+if (fs.existsSync(rootPkgPath)) {
+  const rootPkg = JSON.parse(fs.readFileSync(rootPkgPath, "utf8"));
+  rootPkg.name = projectName.replace(/[^a-zA-Z0-9-_./@]/g, "-");
+  fs.writeFileSync(rootPkgPath, JSON.stringify(rootPkg, null, 2));
+}
 
 // init git
 try {
@@ -43,7 +39,7 @@ console.log(`
 Scaffolded ${projectName}!
 
 Next steps:
-  cd ${projectName}/src
+  cd ${projectName}
   cp .env-local .env  # then edit the values inside .env
   npm i
   npm run dev

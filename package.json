@@ -1,6 +1,6 @@
 {
   "name": "@payai/x402-fetch-starter",
-  "version": "0.5.1",
+  "version": "0.1.0",
   "private": false,
   "description": "Create an x402 Fetch client without cloning the monorepo.",
   "type": "module",
@@ -24,7 +24,8 @@
     "typescript",
     "coinbase",
     "starter",
-    "template"
+    "template",
+    "example"
   ],
   "author": "PayAI",
   "repository": {

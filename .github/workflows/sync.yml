@@ -60,4 +60,3 @@ jobs:
             Auto-synced from https://github.com/${{ env.UPSTREAM_REPO }}
             Path: ${{ env.UPSTREAM_PATH }}
             SHA:  ${{ env.UPSTREAM_SHA }}
-          labels: sync, upstream

@@ -1,4 +1,7 @@
 name: Sync upstream x402 clients/fetch
+permissions:
+  contents: write
+  pull-requests: write
 on:
   schedule: [ { cron: "0 * * * *" } ]  # hourly
   workflow_dispatch:
@@ -47,6 +50,7 @@ jobs:
       - name: Open PR with changes
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore(fetch): sync from ${UPSTREAM_REPO}@${{ env.UPSTREAM_SHA }}"
           branch: chore/sync-upstream
           title: "Sync upstream (clients/fetch) — ${{ env.UPSTREAM_SHA }}"

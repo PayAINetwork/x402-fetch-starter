@@ -24,3 +24,7 @@ if [ ! -f template/src/index.ts ] && [ ! -f template/src/main.ts ]; then
 fi
 
 echo "Sanitization complete."
+
+# Cleanup transient directories so they don't get committed
+rm -rf vendor/upstream || true
+rm -rf upstream || true

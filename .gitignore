@@ -1,0 +1,7 @@
+# Local clone/cache from sync workflow
+/vendor/
+/upstream/
+
+# macOS
+.DS_Store
+

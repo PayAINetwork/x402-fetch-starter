@@ -30,7 +30,7 @@
   "author": "PayAI",
   "repository": {
     "type": "git",
-    "url": "https://github.com/payainetwork/x402-fetch-starter.git"
+    "url": "https://github.com/PayAINetwork/x402-fetch-starter"
   },
   "config": {
     "x402FetchVersion": "0.5.1"

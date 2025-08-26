@@ -1,6 +1,6 @@
 # x402 Fetch Starter
 
-Starter for running an x402 with the fetch client.
+Starter for running an x402 fetch client.
 
 You can find the upstream example at [coinbase/x402 → examples/typescript/clients/fetch](https://github.com/coinbase/x402/tree/main/examples/typescript/clients/fetch). 
 
@@ -9,7 +9,6 @@ You can find the upstream example at [coinbase/x402 → examples/typescript/clie
 ### Requirements
 
 - **Node.js**: 18 or newer
-- **GitHub Actions** enabled in your fork/repo
 
 ### Create a new app using the template
 
@@ -35,6 +34,22 @@ Then inside your new app:
 ```bash
 npm run dev
 ```
+
+### How the created client example works
+
+When you run the generated app, `index.ts` will:
+
+- Load environment variables from `.env` (for example: `RESOURCE_SERVER_URL`, `ENDPOINT_PATH`, `PRIVATE_KEY`).
+- Create a wallet client and wrap the native `fetch` with x402 using `wrapFetchWithPayment`.
+- Call your configured endpoint at `${RESOURCE_SERVER_URL}${ENDPOINT_PATH}`.
+- Log two things to the console:
+  - The parsed JSON response body
+  - The decoded `x-payment-response` headers (useful for inspecting payment receipts/metadata)
+
+
+## The Starter Itself
+
+Below are notes on the starter itself, which creates the example that devs use to get started.
 
 ### How sync works
 

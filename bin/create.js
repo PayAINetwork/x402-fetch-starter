@@ -29,6 +29,35 @@ if (fs.existsSync(rootPkgPath)) {
   fs.writeFileSync(rootPkgPath, JSON.stringify(rootPkg, null, 2));
 }
 
+// perform post-scaffold steps for convenience
+console.log(`\nSetting up your project in: ${targetDir}`);
+
+// 1) Copy environment template
+try {
+  const envLocal = path.join(targetDir, ".env-local");
+  const envExample = path.join(targetDir, ".env.example");
+  const envTarget = path.join(targetDir, ".env");
+  if (fs.existsSync(envLocal)) {
+    console.log("- Creating .env from .env-local");
+    fs.copyFileSync(envLocal, envTarget);
+  } else if (fs.existsSync(envExample)) {
+    console.log("- Creating .env from .env.example");
+    fs.copyFileSync(envExample, envTarget);
+  } else {
+    console.log("- No .env-local or .env.example found; please create .env manually");
+  }
+} catch (err) {
+  console.warn("- Skipped env setup:", err instanceof Error ? err.message : String(err));
+}
+
+// 2) Install dependencies
+try {
+  console.log("- Installing dependencies (npm install)...");
+  execSync("npm install", { stdio: "inherit", cwd: targetDir });
+} catch (err) {
+  console.warn("- npm install failed, you may run it manually:", err instanceof Error ? err.message : String(err));
+}
+
 // init git
 try {
   execSync("git init", { stdio: "ignore", cwd: targetDir });
@@ -42,8 +71,7 @@ You now have a starter example for Fetch wrapped with x402 payment handling.
 
 Next steps:
   cd ${projectName}
-  cp .env-local .env  # then edit the values inside .env
-  npm i
+  # edit values inside .env
   npm run dev
 
 After install, open the main file (e.g., index.ts) to see how the example works.

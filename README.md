@@ -1,35 +1,38 @@
-## x402 Fetch Starter
+# x402 Fetch Starter
 
-Starter and sync wrapper around the upstream example at [coinbase/x402 → examples/typescript/clients/fetch](https://github.com/coinbase/x402/tree/main/examples/typescript/clients/fetch). This repo provides:
+Starter for running an x402 with the fetch client.
 
-- **Scaffold CLI**: quickly create a runnable x402 client template using `x402-fetch`.
-- **Auto-sync**: keeps the template’s example code aligned with the upstream example via GitHub Actions and opens a PR with changes.
+You can find the upstream example at [coinbase/x402 → examples/typescript/clients/fetch](https://github.com/coinbase/x402/tree/main/examples/typescript/clients/fetch). 
+
+## Getting Started
 
 ### Requirements
 
 - **Node.js**: 18 or newer
 - **GitHub Actions** enabled in your fork/repo
 
-### Create a new app from the template
+### Create a new app using the template
 
-Use any of the following:
+Use your preferred package manager to scaffold:
 
+#### npm (npx)
 ```bash
-# npm
 npm exec @payai/x402-fetch-starter -- my-x402-app
+```
 
-# pnpm
+#### pnpm
+```bash
 pnpm dlx @payai/x402-fetch-starter my-x402-app
+```
 
-# bun
+#### bun
+```bash
 bunx @payai/x402-fetch-starter my-x402-app
 ```
 
 Then inside your new app:
 
 ```bash
-cp .env-local .env
-npm i
 npm run dev
 ```
 

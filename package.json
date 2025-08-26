@@ -1,6 +1,6 @@
 {
   "name": "@payai/x402-fetch-starter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "Create an x402 Fetch client without cloning the monorepo.",
   "type": "module",

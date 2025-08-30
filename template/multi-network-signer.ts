@@ -1,14 +1,21 @@
 import { config } from "dotenv";
-import { decodeXPaymentResponse, wrapFetchWithPayment, createSigner, type Hex } from "x402-fetch";
+import {
+  decodeXPaymentResponse,
+  wrapFetchWithPayment,
+  createSigner,
+  type Hex,
+  type MultiNetworkSigner,
+} from "x402-fetch";
 
 config();
 
-const privateKey = process.env.PRIVATE_KEY as Hex | string;
+const evmPrivateKey = process.env.EVM_PRIVATE_KEY as Hex;
+const svmPrivateKey = process.env.SVM_PRIVATE_KEY as string;
 const baseURL = process.env.RESOURCE_SERVER_URL as string; // e.g. https://example.com
 const endpointPath = process.env.ENDPOINT_PATH as string; // e.g. /weather
 const url = `${baseURL}${endpointPath}`; // e.g. https://example.com/weather
 
-if (!baseURL || !privateKey || !endpointPath) {
+if (!baseURL || !evmPrivateKey || !svmPrivateKey || !endpointPath) {
   console.error("Missing required environment variables");
   process.exit(1);
 }
@@ -22,8 +29,9 @@ if (!baseURL || !privateKey || !endpointPath) {
  * - ENDPOINT_PATH: The path of the endpoint to call on the resource server
  */
 async function main(): Promise<void> {
-  // const signer = await createSigner("solana-devnet", privateKey); // uncomment for solana
-  const signer = await createSigner("base-sepolia", privateKey);
+  const evmSigner = await createSigner("base-sepolia", evmPrivateKey);
+  const svmSigner = await createSigner("solana-devnet", svmPrivateKey);
+  const signer = { evm: evmSigner, svm: svmSigner } as MultiNetworkSigner;
   const fetchWithPayment = wrapFetchWithPayment(fetch, signer);
 
   const response = await fetchWithPayment(url, { method: "GET" });

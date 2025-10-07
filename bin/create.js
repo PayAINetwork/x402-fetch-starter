@@ -10,7 +10,7 @@ const repoRoot = path.join(__dirname, "..");
 const templateDir = path.join(repoRoot, "template");
 
 const nameArg = process.argv[2];
-const projectName = nameArg && !nameArg.startsWith("-") ? nameArg : "x402-fetch-app";
+const projectName = nameArg && !nameArg.startsWith("-") ? nameArg : "x402-fetch-client";
 const targetDir = path.resolve(process.cwd(), projectName);
 
 if (fs.existsSync(targetDir) && fs.readdirSync(targetDir).length) {

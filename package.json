@@ -1,6 +1,6 @@
 {
   "name": "@payai/x402-fetch-starter",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": false,
   "description": "Create an x402 Fetch client in less than 2 minutes!",
   "type": "module",
@@ -33,6 +33,6 @@
     "url": "https://github.com/PayAINetwork/x402-fetch-starter"
   },
   "config": {
-    "x402FetchVersion": "0.7.0"
+    "x402FetchVersion": "1.1.0"
   }
 }

@@ -24,10 +24,10 @@ jobs:
           git sparse-checkout set "${UPSTREAM_PATH}"
           echo "UPSTREAM_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
-      - name: Resolve latest x402-fetch version from npm
+      - name: Resolve latest @x402/fetch version from npm
         run: |
           set -euo pipefail
-          VERSION=$(npm view x402-fetch version || echo "0.0.0")
+          VERSION=$(npm view @x402/fetch version || echo "0.0.0")
           echo "X402_FETCH_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Record resolved version in root package.json
@@ -44,9 +44,9 @@ jobs:
           chmod +x scripts/sanitize.sh
           scripts/sanitize.sh "${UPSTREAM_PATH}" "${UPSTREAM_SHA}"
 
-      - name: Inject x402-fetch version into template/package.json
+      - name: Inject @x402/fetch version into template/package.json
         run: |
-          node -e "const fs=require('fs');const p='template/package.json';if(fs.existsSync(p)){const j=JSON.parse(fs.readFileSync(p,'utf8'));const v=process.env.X402_FETCH_VERSION;const setVer=(obj)=>{if(!obj)return false; if(Object.prototype.hasOwnProperty.call(obj,'x402-fetch')){if(v!=='0.0.0'){obj['x402-fetch']='^'+v;} else {delete obj['x402-fetch'];} return true;} return false;};const changed=setVer(j.dependencies)||setVer(j.devDependencies);if(!changed && v!=='0.0.0'){(j.dependencies??={})['x402-fetch']='^'+v;}fs.writeFileSync(p,JSON.stringify(j,null,2));}"
+          node -e "const fs=require('fs');const p='template/package.json';if(fs.existsSync(p)){const j=JSON.parse(fs.readFileSync(p,'utf8'));const v=process.env.X402_FETCH_VERSION;const x402Packages=['@x402/fetch','@x402/evm','@x402/svm'];for(const pkg of x402Packages){if(j.dependencies && j.dependencies[pkg]){j.dependencies[pkg]='^'+v;}};fs.writeFileSync(p,JSON.stringify(j,null,2));}"
 
       - name: Determine if there are changes
         run: |

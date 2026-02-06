@@ -49,9 +49,26 @@ jobs:
           chmod +x scripts/sanitize.sh
           scripts/sanitize.sh "${UPSTREAM_PATH}" "${UPSTREAM_SHA}"
 
-      - name: Inject @x402/fetch version into template/package.json
+      - name: Inject x402 package versions into template/package.json
         run: |
-          node -e "const fs=require('fs');const p='template/package.json';if(fs.existsSync(p)){const j=JSON.parse(fs.readFileSync(p,'utf8'));const v=process.env.X402_FETCH_VERSION;const x402Packages=['@x402/fetch','@x402/evm','@x402/svm'];for(const pkg of x402Packages){if(j.dependencies && j.dependencies[pkg]){j.dependencies[pkg]='^'+v;}};fs.writeFileSync(p,JSON.stringify(j,null,2));}"
+          node <<'EOF'
+          const fs = require('fs');
+          const p = 'template/package.json';
+          if (!fs.existsSync(p)) process.exit(0);
+          const j = JSON.parse(fs.readFileSync(p, 'utf8'));
+          const v = process.env.X402_FETCH_VERSION;
+          if (!v || v === '0.0.0') process.exit(0);
+
+          j.dependencies = j.dependencies || {};
+          // Ensure all required x402 packages are present with correct versions
+          const x402Packages = ['@x402/fetch', '@x402/evm', '@x402/svm'];
+          for (const pkg of x402Packages) {
+            j.dependencies[pkg] = '^' + v;
+          }
+
+          fs.writeFileSync(p, JSON.stringify(j, null, 2));
+          console.log(`Set x402 packages to ^${v}`);
+          EOF
 
       - name: Determine if there are changes
         run: |
